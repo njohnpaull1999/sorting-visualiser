@@ -2,13 +2,27 @@
 import { useEffect } from "react";
 import { useSortingAlgorithmContext } from "./context/Visualizer";
 import Slider from "./components/inputs/Slider";
+import { algorithmOptions } from "./lib/utils";
+import { SortingAlgorithmType } from "./lib/types";
+import Select from "./components/inputs/Select";
 
 export default function Home() {
-  const { array, isRunning, speed, setSpeed} = useSortingAlgorithmContext();
+  const {
+    array,
+    isRunning,
+    speed,
+    setSpeed,
+    selectedAlgorithm,
+    setSelectedAlgorithm,
+  } = useSortingAlgorithmContext();
+
+  const handleAlgorithmChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedAlgorithm(e.target.value as SortingAlgorithmType);
+  }
 
   useEffect(() => {
-    console.log(speed);
-  }, [speed]);
+    console.log(selectedAlgorithm);
+  }, [selectedAlgorithm]);
 
   return (
     <main className="absolute top-0 h-screen w-screen z-[-2] bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#150229_1px)] bg-[size:40px_40px]">
@@ -24,7 +38,13 @@ export default function Home() {
             <div className="flex items-center justify-center gap-4">
               <Slider
                 value={speed}
-                handleChange={(e) => setSpeed((e))}
+                handleChange={(e) => setSpeed(e)}
+                isDisabled={isRunning}
+              />
+              <Select
+                options={algorithmOptions}
+                defaultValue={selectedAlgorithm}
+                onChange={handleAlgorithmChange}
                 isDisabled={isRunning}
               />
             </div>

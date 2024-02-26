@@ -5,3 +5,8 @@ export type SortingAlgorithmType =
     | 'merge'
     | 'quick'
     | 'heap';
+
+export type SelectOptionsType = {
+    label: string;
+    value: string;
+};
