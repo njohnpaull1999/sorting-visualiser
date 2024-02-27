@@ -2,9 +2,11 @@
 import { useEffect } from "react";
 import { useSortingAlgorithmContext } from "./context/Visualizer";
 import Slider from "./components/inputs/Slider";
-import { algorithmOptions } from "./lib/utils";
+import { algorithmOptions, generateAnimationArray } from "./lib/utils";
 import { SortingAlgorithmType } from "./lib/types";
 import Select from "./components/inputs/Select";
+import { RxReset } from "react-icons/rx";
+import { FaPlayCircle } from "react-icons/fa";
 
 export default function Home() {
   const {
@@ -14,15 +16,23 @@ export default function Home() {
     setSpeed,
     selectedAlgorithm,
     setSelectedAlgorithm,
+    requiresReset,
+    resetArrayAndAnimation,
+    runAnimation
   } = useSortingAlgorithmContext();
 
   const handleAlgorithmChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAlgorithm(e.target.value as SortingAlgorithmType);
   }
 
-  useEffect(() => {
-    console.log(selectedAlgorithm);
-  }, [selectedAlgorithm]);
+  const handlePlay = () => {
+    if (requiresReset) {
+      resetArrayAndAnimation();
+      // reset array and animation
+    } else {
+      generateAnimationArray(selectedAlgorithm, isRunning, array, runAnimation);
+    }
+  }
 
   return (
     <main className="absolute top-0 h-screen w-screen z-[-2] bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#150229_1px)] bg-[size:40px_40px]">
@@ -47,6 +57,14 @@ export default function Home() {
                 onChange={handleAlgorithmChange}
                 isDisabled={isRunning}
               />
+              <button className="flex items-center justify-center" onClick={handlePlay}>
+                {requiresReset ? (
+                  <RxReset className="h-6 w-6 text-gray-300" />
+                ) : (
+                  <FaPlayCircle className="h-6 w-6 text-gray-300" />
+                )
+                }
+              </button>
             </div>
           </div>
           <div className="relative h-[calc(100vh-66px)] w-full">
